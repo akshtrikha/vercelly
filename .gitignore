@@ -3,3 +3,7 @@ dist/
 
 # Node packages
 node_modules/
+
+# temp files
+temp/
+out/
