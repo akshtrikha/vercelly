@@ -17,7 +17,7 @@
   },
   "scripts": {
     "build":"esbuild src/index.ts --platform=node --minify --watch --bundle --sourcemap --outfile=dist/bundle.js",
-    "dev": "nodemon dist/bundle.js",
+    "dev": "nodemon dist/bundle.js --ignore out/*",
     "lint": "gts lint",
     "clean": "gts clean",
     "compile": "tsc",

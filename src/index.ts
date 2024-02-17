@@ -6,8 +6,6 @@ import { filePaths, generate } from "./utils.js";
 import path from "path";
 
 const PORT = 3000;
-let srcPath = __dirname.split(path.sep).join(path.posix.sep)
-console.log("srcPath: ", srcPath)
 
 const app = express();
 app.use(cors());
@@ -26,13 +24,10 @@ app.post("/upload", async (req, res) => {
     const id = generate();
     const git = simpleGit();
     await git.clone(repoURL, `out/${id}`);
-    let src: string = path.join(srcPath, `out/${id}`);
-    src = src.split(path.sep).join(path.posix.sep);
-    console.log("src: ", src);
     
-    const files:string[] | undefined | null = filePaths(src);
+    const files:string[] | undefined | null = filePaths(path.join(process.cwd(), `out/${id}`));
     files?.forEach((file:string) => {
-        console.log(file);
+        console.log(path.resolve(`out/${id}`, file));
     });
 
     res.send({ id: id });

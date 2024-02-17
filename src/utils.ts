@@ -1,5 +1,7 @@
 import fs from "fs";
-import path from "path";
+import path, { resolve } from "path";
+
+import { PathLike } from "fs";
 
 function getRandomInt(max: number) {
     return Math.floor(Math.random() * max)
@@ -16,12 +18,11 @@ export function generate() {
     return randomId;
 }
 
-export function filePaths(srcPath: string): string[] {
+export function filePaths(srcPath: PathLike): string[] {
     console.log("filePaths_src: ", srcPath);
     let filePaths: string[] = []
     try {
-        filePaths = fs.readdirSync(srcPath.split(path.sep).join(path.posix.sep));
-        console.log(filePaths);
+        filePaths = fs.readdirSync(srcPath, {encoding: 'utf-8', recursive: true});
     } catch(err) {
         console.error("filePaths() error: ", err)
     }
