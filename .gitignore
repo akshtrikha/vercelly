@@ -1,3 +1,6 @@
+# env
+.env
+
 # Build folder
 dist/
 
