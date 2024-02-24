@@ -31,9 +31,9 @@ app.post("/upload", async (req, res) => {
     try {
         const bucket = await getBucket(client);
 
-        const putResponse = await upload(client, id, files, bucket);
+        await upload(client, id, files, bucket);
 
-        return res.status(200).send({ id: id, message: "Upload Successful", putResponse: putResponse });
+        return res.status(200).send({ id: id, message: "Upload Successful" });
 
     } catch (err) {
         console.error("Fetching Bucket list error: ", err);

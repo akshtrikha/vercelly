@@ -2,6 +2,7 @@ import {
   ListBucketsCommand,
   S3Client,
   PutObjectCommand,
+  PutObjectCommandInput
 } from '@aws-sdk/client-s3';
 
 import fs from 'fs';
@@ -30,31 +31,35 @@ export async function upload(s3Client: S3Client, id: string, files: string[], bu
     return file.includes('.git') === false;
   }); //! Removing .git files for testing. Revert this change.
 
-  let putResponse: Object[] = [];
-
   try {
+    let input: PutObjectCommandInput = {
+      Key: `${id}/`,
+      Bucket: bucket
+    }
+
+    s3Client.send(await new PutObjectCommand(input));
+
     filesToUpload.forEach(async file => {
+      const absolutePath = path.resolve(`out/${id}`, file);
+      const relativePath = (`${id}/` + file).split(path.sep).join(path.posix.sep);
+
       const stat = fs.statSync(path.resolve(`out/${id}`, file));
-      let input;
       if (stat.isFile()) {
         input = {
-          Key: file.split(path.sep).join(path.posix.sep),
-          Body: fs.readFileSync(path.resolve(`out/${id}`, file)),
+          Key: relativePath,
+          Body: fs.readFileSync(absolutePath),
           Bucket: bucket,
         };
       } else {
         input = {
-          Key: file.split(path.sep).join(path.posix.sep) + '/',
+          Key: relativePath + '/',
           Bucket: bucket,
         };
       }
 
-      const res = s3Client.send(await new PutObjectCommand(input));
-      putResponse.push(res);
+      s3Client.send(await new PutObjectCommand(input));
 
     });
-
-    return putResponse;
 
   } catch (err) {
     throw err;
