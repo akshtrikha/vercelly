@@ -10,3 +10,6 @@ node_modules/
 # temp files
 temp/
 out/
+
+# database
+*.rdb

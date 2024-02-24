@@ -3,8 +3,9 @@ import cors from "cors";
 import simpleGit from "simple-git";
 import path from "path";
 
+import { redisClient } from "./redisClient"
 import { client, getBucket, upload } from "./s3";
-import { filePaths, generate } from "./utils.js";
+import { filePaths, generate } from "./utils";
 
 const PORT = 3000;
 
@@ -33,11 +34,13 @@ app.post("/upload", async (req, res) => {
 
         await upload(client, id, files, bucket);
 
+        await redisClient.LPUSH("idList", id);
+
         return res.status(200).send({ id: id, message: "Upload Successful" });
 
     } catch (err) {
-        console.error("Fetching Bucket list error: ", err);
-        return res.status(403).send({ message: "Error fetching bucket list." });
+        console.error("Faced some error while uploading the repo to S3: ", err);
+        return res.status(403).send({ message: err });
     }
 
 })
