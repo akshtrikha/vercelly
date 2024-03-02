@@ -1,0 +1,30 @@
+{
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.521.0",
+    "@types/aws-sdk": "^2.7.0",
+    "aws-sdk": "^2.1565.0",
+    "cors": "^2.8.5",
+    "esbuild": "^0.20.1",
+    "fs": "^0.0.1-security",
+    "nodemon": "^3.1.0",
+    "path": "^0.12.7",
+    "redis": "^4.6.13",
+    "typescript": "^5.3.3"
+  },
+  "name": "upload-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild src/index.ts --platform=node --minify --watch --bundle --sourcemap --outfile=dist/bundle.js",
+    "build-dev": "esbuild src/index.ts --platform=node --bundle --outfile=dist/index.js",
+    "dev": "nodemon --env-file=.env dist/bundle.js --ignore out/*",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^20.11.20"
+  }
+}

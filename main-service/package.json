@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/valid-url": "^1.0.7",
+    "cors": "^2.8.5",
+    "esbuild": "^0.20.1",
+    "express": "^4.18.2",
+    "nodemon": "^3.1.0",
+    "redis": "^4.6.13",
+    "typescript": "^5.3.3",
+    "valid-url": "^1.0.9"
+  },
+  "name": "main-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "build": "esbuild src/index.ts --platform=node --minify --watch --bundle --sourcemap --outfile=dist/bundle.js",
+    "build-dev": "esbuild src/index.ts --platform=node --bundle --outfile=dist/index.js",
+    "dev": "nodemon --env-file=.env dist/bundle.js --ignore out/*",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

@@ -1,15 +1,15 @@
 # env
-.env
+**/.env
 
 # Build folder
-dist/
+**/dist/
 
 # Node packages
-node_modules/
+**/node_modules/
 
 # temp files
-temp/
-out/
+**/temp/
+**/out/
 
 # database
-*.rdb
+**/*.rdb
