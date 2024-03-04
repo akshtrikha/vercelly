@@ -1,5 +1,4 @@
 import fs from "fs";
-import path, { resolve } from "path";
 
 import { PathLike } from "fs";
 
