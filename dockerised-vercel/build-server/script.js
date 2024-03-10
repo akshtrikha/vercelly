@@ -10,7 +10,7 @@ const publisher = new Redis(process.env.REDIS_URL);
 function publishLog(log) {
     // log can be either a string or a buffer
     // publish takes two arguments: channel and the message to push in the channel
-    publisher.publish(`logs:${process.env.ID}`, JSON.stringify(log));
+    publisher.publish(`logs:${process.env.ID}`, JSON.stringify({ log }));
 }
 
 const s3Client = new S3Client({
