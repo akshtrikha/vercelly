@@ -50,7 +50,8 @@ app.post('/project', async (req, res) => {
                         {name: 'AWS_SECRET_ACCESS_KEY_DOCKER_USER', value: process.env.AWS_SECRET_ACCESS_KEY_DOCKER_USER},
                         {name: 'AWS_BUCKET_NAME', value: process.env.AWS_BUCKET_NAME},
                         {name: 'AWS_BUCKET_REGION', value: process.env.AWS_BUCKET_REGION},
-                        {name: 'ID', value: projectSlug}
+                        {name: 'ID', value: projectSlug},
+                        {name: 'REDIS_URL', value: process.env.REDIS_URL}
                     ]
                 }
             ]

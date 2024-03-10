@@ -3,6 +3,15 @@ const fs = require("fs");
 const path = require("path");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const mime = require("mime-types");
+const Redis = require("ioredis");
+
+const publisher = new Redis(process.env.REDIS_URL);
+
+function publishLog(log) {
+    // log can be either a string or a buffer
+    // publish takes two arguments: channel and the message to push in the channel
+    publisher.publish(`logs:${process.env.ID}`, JSON.stringify(log));
+}
 
 const s3Client = new S3Client({
     region: process.env.AWS_BUCKET_REGION,
@@ -25,6 +34,7 @@ function filePaths(srcPath) {
 
 async function init() {
     console.log('Executing script.js');
+    publishLog("Building...");
     const srcDirPath = path.join(__dirname, "src")
 
     const p = exec(`cd ${srcDirPath} && npm install && npm run build`);
@@ -33,12 +43,14 @@ async function init() {
         console.log(data.toString());
     })
     
-    p.stderr.on("data", function(data) {
+    p.stderr.on("error", function(data) {
         console.error(`Error: ${data.toString()}`);
+        publishLog(`error: ${data.toString()}`);
     })
 
     p.on("close", async function() {
         console.log("Build Completed!");
+        publishLog("Build Completed!");
 
         const id = process.env.ID
 
@@ -61,8 +73,11 @@ async function init() {
         console.log(awsFilePaths);
         console.log(absolutePaths);
 
+        publishLog('Starting to upload the files...');
+
         for(const file in files) {
             console.log(`Uploading ${id}/${files[file]}`);
+            publishLog(`Uploading ${id}/${files[file]}`);
 
             const input = {
                 Key: awsFilePaths[file],
@@ -71,10 +86,12 @@ async function init() {
                 ContentType: mime.lookup(absolutePaths[file])
             }
 
-            await s3Client.send(new PutObjectCommand(input))
+            await s3Client.send(new PutObjectCommand(input));
+            publishLog(`Uploaded ${id}/${files[file]}`);
         }
 
         console.log(`Uploading completed: ${id}`);
+        publishLog(`Uploading completed: ${id}`);
     })
 }
 
